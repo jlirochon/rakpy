@@ -13,7 +13,7 @@ class AdvertiseSystem(Packet):
     server_id = fields.LongLongField()
     server_name = fields.StringField()
 
-    class Meta:
+    class Meta(object):
         id = 0x1d
         structure = ("ping_id", "server_id", "__magic__", "server_name")
 
@@ -24,7 +24,7 @@ class ClientConnect(Packet):
     send_ping = fields.LongLongField()
     use_security = fields.BoolField()
 
-    class Meta:
+    class Meta(object):
         id = 0x09
         structure = ("client_id", "send_ping", "use_security")
 
@@ -33,7 +33,7 @@ class ClientConnect(Packet):
 class PingData(Packet):
     ping_id = fields.LongLongField()
 
-    class Meta:
+    class Meta(object):
         id = 0x00
         structure = ("ping_id")
 
@@ -42,7 +42,7 @@ class PingData(Packet):
 class PongData(Packet):
     ping_id = fields.LongLongField()
 
-    class Meta:
+    class Meta(object):
         id = 0x03
         structure = ("ping_id")
 
@@ -52,7 +52,7 @@ class UnconnectedPing(Packet):
     ping_id = fields.LongLongField()
     client_id = fields.LongLongField()
 
-    class Meta:
+    class Meta(object):
         id = 0x01
         structure = ("ping_id", "__magic__", "client_id")
 
@@ -62,7 +62,7 @@ class UnconnectedPingOpenConnections(Packet):
     ping_id = fields.LongLongField()
     client_id = fields.LongLongField()
 
-    class Meta:
+    class Meta(object):
         id = 0x02
         structure = ("ping_id", "__magic__", "client_id")
 
@@ -73,6 +73,6 @@ class UnconnectedPong(Packet):
     server_id = fields.LongLongField()
     server_name = fields.StringField()
 
-    class Meta:
+    class Meta(object):
         id = 0x1c
         structure = ("ping_id", "server_id", "__magic__", "server_name")

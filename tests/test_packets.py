@@ -8,7 +8,7 @@ from rakpy.protocol.packets import Packet, UnconnectedPing
 def test_packet_id():
 
     class DummyPacket(Packet):
-        class Meta:
+        class Meta(object):
             id = 0x42
             structure = ()
 
