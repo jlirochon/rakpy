@@ -1,6 +1,6 @@
 # rakpy
 
-Pythonic implementation of RakNet protocol **WORK IN PROGRESS**
+Pythonic implementation of the [RakNet](https://github.com/OculusVR/RakNet) protocol **WORK IN PROGRESS**
 
 ## Project goals
 
