@@ -32,7 +32,7 @@ with open("resources/packets.yml") as yaml_file:
 environment = Environment(loader=FileSystemLoader("resources"), trim_blocks=True)
 template = environment.get_template("packets.py.jinja")
 
-with open("protocol/packets.py", "w") as destination_file:
+with open("rakpy/protocol/packets.py", "w") as destination_file:
     destination_file.write(template.render(packets=process_packets(packets)))
 
 # generate json for convenience
