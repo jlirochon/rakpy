@@ -5,6 +5,7 @@ Pythonic implementation of the [RakNet](https://github.com/OculusVR/RakNet) prot
 [![Build Status](https://img.shields.io/travis/jlirochon/rakpy/master.svg?style=flat-square)](https://travis-ci.org/jlirochon/rakpy)
 [![Code Coverage](https://img.shields.io/codecov/c/github/jlirochon/rakpy/master.svg?style=flat-square)](https://codecov.io/github/jlirochon/rakpy?branch=master)
 [![Code Quality](https://img.shields.io/codacy/921c9b1c67c34a3f824382737634bbd4.svg?style=flat-square)](https://www.codacy.com/app/julien_6/rakpy)
+[![Chat](https://img.shields.io/gitter/room/jlirochon/rakpy.svg?style=flat-square)](https://gitter.im/jlirochon/rakpy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## Project goals
 
