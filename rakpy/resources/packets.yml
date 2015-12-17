@@ -1,0 +1,125 @@
+packets:
+
+#  # ACK
+#  - id: \xc0
+#    type: acknowledge_packet
+#    name: ack
+
+  # ADVERTISE_SYSTEM
+  - id: \x1d
+    type: packet
+    name: advertise_system
+    structure:
+      - { type: long_long, name: ping_id }
+      - { type: long_long, name: server_id }
+      - { type: __magic__ }
+      - { type: string, name: server_name }
+
+  # CLIENT_CONNECT_DataPacket
+  - id: \x09
+    name: client_connect
+    type: data_packet
+    structure:
+      - { type: long_long, name: client_id }
+      - { type: long_long, name: send_ping }
+      - { type: bool, name: use_security }
+
+  # CLIENT_DISCONNECT_DataPacket
+
+  # CLIENT_HANDSHAKE_DataPacket
+
+  # DATA_PACKET_0
+  # DATA_PACKET_1
+  # DATA_PACKET_2
+  # DATA_PACKET_3
+  # DATA_PACKET_4
+  # DATA_PACKET_5
+  # DATA_PACKET_6
+  # DATA_PACKET_7
+  # DATA_PACKET_8
+  # DATA_PACKET_9
+  # DATA_PACKET_A
+  # DATA_PACKET_B
+  # DATA_PACKET_C
+  # DATA_PACKET_D
+  # DATA_PACKET_E
+  # DATA_PACKET_F
+
+#  # NACK
+#  - id: \xa0
+#    type: acknowledge_packet
+#    name: nack
+
+#  # OPEN_CONNECTION_REPLY_1
+#  - id: \x06
+#    type: packet
+#    name: open_connection_reply_1
+
+#  # OPEN_CONNECTION_REPLY_2
+#  - id: \x08
+#    type: packet
+#    name: open_connection_reply_2
+
+#  # OPEN_CONNECTION_REQUEST_1
+#  - id: \x05
+#    type: packet
+#    name: open_connection_request_1
+#    structure:
+#      - { type: __magic__ }
+#      - { type: byte, name: protocol }
+#      # padding with \x00 until complete packet = mtu_size
+#      - { type: ????, name: mtu_size }
+
+#  # OPEN_CONNECTION_REQUEST_2
+#  - id: \x07
+#    type: packet
+#    name: open_connection_request_2
+#    structure:
+#      - { type: __magic__ }
+#      - { type: address, name: server_address }
+#      - { type: unsigned_short, name: mtu_size }
+#      - { type: long_long, name: client_id }
+
+  # PING_DataPacket
+  - id: \x00
+    name: ping_data
+    structure:
+      - { type: long_long, name: ping_id }
+
+  # PONG_DataPacket
+  - id: \x03
+    name: pong_data
+    structure:
+      - { type: long_long, name: ping_id }
+
+#  # SERVER_HANDSHAKE_DataPacket
+#  - id: \x10
+#    name: server_handshake_data
+#    structure:
+#      - { type: address, name: address }
+#      - { type: port, name: port }
+
+  # UNCONNECTED_PING
+  - id: \x01
+    name: unconnected_ping
+    structure:
+      - { type: long_long, name: ping_id }
+      - { type: __magic__ }
+      - { type: long_long, name: client_id }
+
+  # UNCONNECTED_PING_OPEN_CONNECTIONS
+  - id: \x02
+    name: unconnected_ping_open_connections
+    structure:
+      - { type: long_long, name: ping_id }
+      - { type: __magic__ }
+      - { type: long_long, name: client_id }
+
+  # UNCONNECTED_PONG
+  - id: \x1c
+    name: unconnected_pong
+    structure:
+      - { type: long_long, name: ping_id }
+      - { type: long_long, name: server_id }
+      - { type: __magic__ }
+      - { type: string, name: server_name }

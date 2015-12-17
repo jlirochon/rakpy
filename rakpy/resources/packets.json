@@ -1,0 +1,120 @@
+{
+    "packets": [
+        {
+            "type": "packet", 
+            "id": "\\x1d", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "ping_id"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "server_id"
+                }, 
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "string", 
+                    "name": "server_name"
+                }
+            ], 
+            "name": "advertise_system"
+        }, 
+        {
+            "type": "data_packet", 
+            "id": "\\x09", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "client_id"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "send_ping"
+                }, 
+                {
+                    "type": "bool", 
+                    "name": "use_security"
+                }
+            ], 
+            "name": "client_connect"
+        }, 
+        {
+            "id": "\\x00", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "ping_id"
+                }
+            ], 
+            "name": "ping_data"
+        }, 
+        {
+            "id": "\\x03", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "ping_id"
+                }
+            ], 
+            "name": "pong_data"
+        }, 
+        {
+            "id": "\\x01", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "ping_id"
+                }, 
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "client_id"
+                }
+            ], 
+            "name": "unconnected_ping"
+        }, 
+        {
+            "id": "\\x02", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "ping_id"
+                }, 
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "client_id"
+                }
+            ], 
+            "name": "unconnected_ping_open_connections"
+        }, 
+        {
+            "id": "\\x1c", 
+            "structure": [
+                {
+                    "type": "long_long", 
+                    "name": "ping_id"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "server_id"
+                }, 
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "string", 
+                    "name": "server_name"
+                }
+            ], 
+            "name": "unconnected_pong"
+        }
+    ]
+}
