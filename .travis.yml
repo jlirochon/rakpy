@@ -3,13 +3,13 @@ python:
   - "2.7"
 
 before_install:
-  - pip install pytest codecov
+  - pip install pytest pytest-cov codecov
 
 install:
   - pip install -e .
 
 script:
-  - py.test
+  - py.test --cov=rakpy
 
 after_success:
-  - codecov
+  - codecov --root=rakpy
