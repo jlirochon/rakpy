@@ -159,7 +159,7 @@ def test_string_field():
     assert field.decode("\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88") == u"ボールト"
 
 
-def test_float_string():
+def test_float_field():
     field = fields.FloatField()
 
     # too low
@@ -167,9 +167,9 @@ def test_float_string():
         field.encode(-4 * pow(10, 38))
 
     # some very low value
-    low_value = -3 * pow(10, 38)
-    assert field.encode(low_value) == "\xff\x61\xb1\xe6"
-    assert abs(field.decode("\xff\x61\xb1\xe6") - low_value) < abs(low_value * pow(10, -8))
+    low_value = -3.2345678 * pow(10, 38)
+    assert field.encode(low_value) == "\xff\x73\x57\x83"
+    assert abs(field.decode("\xff\x73\x57\x83") - low_value) < abs(low_value * pow(10, -7))
 
     # still some negative value
     assert field.encode(-300) == "\xc3\x96\x00\x00"
@@ -184,6 +184,36 @@ def test_float_string():
     assert field.decode("\x43\x96\x00\x00") == 300
 
     # some very high value
-    high_value = 3 * pow(10, 38)
-    assert field.encode(high_value) == "\x7f\x61\xb1\xe6"
-    assert abs(field.decode("\x7f\x61\xb1\xe6") - high_value) < abs(high_value * pow(10, -8))
+    high_value = 3.2345678 * pow(10, 38)
+    assert field.encode(high_value) == "\x7f\x73\x57\x83"
+    assert abs(field.decode("\x7f\x73\x57\x83") - high_value) < abs(high_value * pow(10, -7))
+
+
+def test_double_field():
+    field = fields.DoubleField()
+
+    # too low
+    with pytest.raises(OverflowError):
+        field.encode(-4 * pow(10, 400))
+
+    # some very low value
+    low_value = -3.2345678 * pow(10, 64)
+    assert field.encode(low_value) == "\xcd\x53\xa8\x30\xf3\x15\x89\x61"
+    assert abs(field.decode("\xcd\x53\xa8\x30\xf3\x15\x89\x61") - low_value) < abs(low_value * pow(10, -8))
+
+    # still some negative value
+    assert field.encode(-300) == "\xc0\x72\xc0\x00\x00\x00\x00\x00"
+    assert field.decode("\xc0\x72\xc0\x00\x00\x00\x00\x00") == -300
+
+    # 0
+    assert field.encode(0) == "\x00\x00\x00\x00\x00\x00\x00\x00"
+    assert field.decode("\x00\x00\x00\x00\x00\x00\x00\x00") == 0
+
+    # some positive value
+    assert field.encode(300) == "\x40\x72\xc0\x00\x00\x00\x00\x00"
+    assert field.decode("\x40\x72\xc0\x00\x00\x00\x00\x00") == 300
+
+    # some very high value
+    high_value = 3.2345678 * pow(10, 64)
+    assert field.encode(high_value) == "\x4d\x53\xa8\x30\xf3\x15\x89\x61"
+    assert abs(field.decode("\x4d\x53\xa8\x30\xf3\x15\x89\x61") - high_value) < abs(high_value * pow(10, -8))

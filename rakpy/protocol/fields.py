@@ -94,29 +94,35 @@ class IntField(SignedNumericField):
     PACK_FORMAT = "!i"
 
 
-# TODO
-class DoubleField(SignedNumericField):
-    LENGTH = 4
-    PACK_FORMAT = "!d"
-
-
 class LongLongField(SignedNumericField):
     LENGTH = 8
     PACK_FORMAT = "!q"
 
 
-# TODO
 class FloatField(NumericField):
     LENGTH = 4
     PACK_FORMAT = "!f"
 
     @classmethod
     def get_min_value(cls):
-        return -5 * pow(10, 40)
+        return float("-inf")  # OverflowError will be raised at runtime
 
     @classmethod
     def get_max_value(cls):
-        return 5 * pow(10, 40)
+        return float("inf")   # OverflowError will be raised at runtime
+
+    @classmethod
+    def encode(cls, value):
+        return super(FloatField, cls).encode(float(value))
+
+    @classmethod
+    def decode(cls, data):
+        return float(super(FloatField, cls).decode(data))
+
+
+class DoubleField(FloatField):
+    LENGTH = 8
+    PACK_FORMAT = "!d"
 
 
 class BoolField(Field):
