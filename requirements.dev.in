@@ -1,0 +1,6 @@
+ipython
+pytest
+pytest-pep8
+pytest-cov
+PyYAML
+Jinja2
