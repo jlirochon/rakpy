@@ -2,6 +2,10 @@
 
 Pythonic implementation of the [RakNet](https://github.com/OculusVR/RakNet) protocol **WORK IN PROGRESS**
 
+[![Build Status](https://travis-ci.org/jlirochon/rakpy.svg)](https://travis-ci.org/jlirochon/rakpy)
+[![codecov.io](https://codecov.io/github/jlirochon/rakpy/coverage.svg?branch=master)](https://codecov.io/github/jlirochon/rakpy?branch=master)
+
+
 ## Project goals
 
 * Provide a pythonic interface (other projects exist but they feel like Java or PHP)
