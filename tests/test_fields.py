@@ -28,6 +28,34 @@ def test_byte_field():
         field.encode(128)
 
 
+def test_triad_field():
+    field = fields.TriadField()
+
+    # too low
+    with pytest.raises(OverflowError):
+        field.encode(-1)
+
+    # 0
+    assert field.encode(0) == "\x00\x00\x00"
+    assert field.decode("\x00\x00\x00") == 0
+
+    # 1
+    assert field.encode(1) == "\x00\x00\x01"
+    assert field.decode("\x00\x00\x01") == 1
+
+    # 256
+    assert field.encode(256) == "\x00\x01\x00"
+    assert field.decode("\x00\x01\x00") == 256
+
+    # max value
+    assert field.encode(16777215) == "\xff\xff\xff"
+    assert field.decode("\xff\xff\xff") == 16777215
+
+    # to high
+    with pytest.raises(OverflowError):
+        field.encode(16777216)
+
+
 def test_unsigned_byte_field():
     field = fields.UnsignedByteField()
 

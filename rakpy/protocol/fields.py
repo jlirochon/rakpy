@@ -84,6 +84,19 @@ class UnsignedByteField(UnsignedNumericField):
         return pow(2, 8 * cls.LENGTH) - 1
 
 
+class TriadField(UnsignedNumericField):
+    LENGTH = 3
+    PACK_FORMAT = "!I"
+
+    @classmethod
+    def decode(cls, data):
+        return super(TriadField, cls).decode(b'\x00' + data)
+
+    @classmethod
+    def encode(cls, value):
+        return super(TriadField, cls).encode(value)[1:]
+
+
 class UnsignedShortField(UnsignedByteField):
     LENGTH = 2
     PACK_FORMAT = "!H"
