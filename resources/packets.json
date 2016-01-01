@@ -42,6 +42,28 @@
             "name": "client_connect"
         }, 
         {
+            "type": "packet", 
+            "id": "\\x06", 
+            "structure": [
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "server_id"
+                }, 
+                {
+                    "type": "bool", 
+                    "name": "use_security"
+                }, 
+                {
+                    "type": "unsigned_short", 
+                    "name": "mtu_size"
+                }
+            ], 
+            "name": "open_connection_reply_1"
+        }, 
+        {
             "id": "\\x00", 
             "structure": [
                 {

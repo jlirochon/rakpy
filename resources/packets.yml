@@ -50,10 +50,16 @@ packets:
 #    type: acknowledge_packet
 #    name: nack
 
-#  # OPEN_CONNECTION_REPLY_1
-#  - id: \x06
-#    type: packet
-#    name: open_connection_reply_1
+  # OPEN_CONNECTION_REPLY_1
+  - id: \x06
+    type: packet
+    name: open_connection_reply_1
+    structure:
+      - { type: __magic__ }
+      - { type: long_long, name: server_id }
+      - { type: bool, name: use_security }
+      - { type: unsigned_short, name: mtu_size }
+
 
 #  # OPEN_CONNECTION_REPLY_2
 #  - id: \x08

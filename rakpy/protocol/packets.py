@@ -30,6 +30,17 @@ class ClientConnect(Packet):
 
 
 @registry.add
+class OpenConnectionReply1(Packet):
+    server_id = fields.LongLongField()
+    use_security = fields.BoolField()
+    mtu_size = fields.UnsignedShortField()
+
+    class Meta(object):
+        id = 0x06
+        structure = ("__magic__", "server_id", "use_security", "mtu_size")
+
+
+@registry.add
 class PingData(Packet):
     ping_id = fields.LongLongField()
 
