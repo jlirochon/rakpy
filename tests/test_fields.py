@@ -245,3 +245,25 @@ def test_double_field():
     high_value = 3.2345678 * pow(10, 64)
     assert field.encode(high_value) == "\x4d\x53\xa8\x30\xf3\x15\x89\x61"
     assert abs(field.decode("\x4d\x53\xa8\x30\xf3\x15\x89\x61") - high_value) < abs(high_value * pow(10, -8))
+
+
+options_field_data = [
+    # split
+    (dict(has_split=False, reliability=0x00), "\x00"),  # 0b00000000
+    (dict(has_split=True, reliability=0x00), "\x10"),  # 0b00010000
+    # reliability
+    (dict(has_split=False, reliability=0x01), "\x20"),  # 0b00100000
+    (dict(has_split=False, reliability=0x02), "\x40"),  # 0b01000000
+    (dict(has_split=False, reliability=0x03), "\x60"),  # 0b01100000
+    (dict(has_split=False, reliability=0x04), "\x80"),  # 0b10000000
+    (dict(has_split=False, reliability=0x05), "\xa0"),  # 0b10100000
+    (dict(has_split=False, reliability=0x06), "\xc0"),  # 0b11000000
+    (dict(has_split=False, reliability=0x07), "\xe0"),  # 0b11100000
+]
+
+
+@pytest.mark.parametrize("decoded,encoded", options_field_data)
+def test_options_field(encoded, decoded):
+    field = fields.OptionsField()
+    assert field.encode(decoded) == encoded
+    assert field.decode(encoded) == decoded

@@ -166,3 +166,23 @@ class StringField(Field):
     def encode(cls, value):
         value = value.encode("utf-8")
         return cls.LENGTH_FIELD.encode(len(value)) + value
+
+
+class OptionsField(Field):
+    LENGTH = 1
+
+    @classmethod
+    def decode(cls, data):
+        options = dict()
+        options['reliability'] = (ord(data) & 0b11100000) >> 5
+        options['has_split'] = bool(ord(data) & 0b00010000)
+        return options
+
+    @classmethod
+    def encode(cls, options):
+        data = 0b00000000
+        if options.get('has_split', False):
+            data |= 0b00010000
+        reliability = options.get('reliability', 0x00) << 5
+        data |= reliability
+        return chr(data)
