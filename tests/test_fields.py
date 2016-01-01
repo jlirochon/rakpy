@@ -2,6 +2,7 @@
 import pytest
 
 from rakpy.protocol import fields
+from rakpy.protocol.fields import Address
 
 
 def test_byte_field():
@@ -265,5 +266,18 @@ options_field_data = [
 @pytest.mark.parametrize("decoded,encoded", options_field_data)
 def test_options_field(encoded, decoded):
     field = fields.OptionsField()
+    assert field.encode(decoded) == encoded
+    assert field.decode(encoded) == decoded
+
+
+address_field_data = [
+    (Address(ip="127.0.0.1", port=19132, version=4), b"\x04\x7f\x00\x00\x01\x4a\xbc"),
+    (Address(ip="192.168.0.42", port=29132, version=4), b"\x04\xc0\xa8\x00\x2a\x71\xcc")
+]
+
+
+@pytest.mark.parametrize("decoded,encoded", address_field_data)
+def test_address_field(encoded, decoded):
+    field = fields.AddressField()
     assert field.encode(decoded) == encoded
     assert field.decode(encoded) == decoded

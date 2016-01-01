@@ -3,9 +3,10 @@ import inspect
 
 import six
 
+from rakpy.io import convert_to_stream
 from rakpy.protocol.const import MAGIC
 from rakpy.protocol.exceptions import UnknownPacketException, RemainingDataException
-from rakpy.protocol.fields import Field
+from rakpy.protocol import fields
 
 
 class PacketRegistry(dict):
@@ -25,9 +26,10 @@ class PacketRegistry(dict):
 registry = PacketRegistry()
 
 
+@convert_to_stream("data")
 def decode_packet(data):
     try:
-        packet_class = registry[ord(data[:1])]
+        packet_class = registry[ord(data[0])]
     except KeyError:
         raise UnknownPacketException
     return packet_class(data)
@@ -78,31 +80,39 @@ class Packet(six.with_metaclass(PacketBase)):
 
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
-            self._decode(args[0])
+            self._init_from_buffer(args[0])
         super(Packet, self).__init__()
+
+    @convert_to_stream("data")
+    def _init_from_buffer(self, data):
+        self._data = data
+        self._decode()
 
     def _get_id(self):
         return self._meta.id
-    id = property(_get_id)
+    id = property(fget=lambda self: self._get_id())
 
-    def _decode(self, data):
-        if self._meta.id != ord(data[0]):
-            raise ValueError
+    def _check_id(self, id):
+        return id == self._meta.id
 
-        # drop first byte
-        data = data[1:]
+    def _get_structure(self):
+        yield "__id__"
+        for field_name in self._meta.structure:
+            yield field_name
 
-        for name in self._meta.structure:
-            if name == "__magic__":
-                field = MagicField()
-                length = field.guess_length(data)
+    def _decode(self):
+        for name in self._get_structure():
+            if name == "__id__":
+                packet_id = fields.ByteField.decode(self._data)
+                if not self._check_id(packet_id):
+                    raise ValueError
+            elif name == "__magic__":
+                MagicField.decode(self._data)
             else:
                 field = self._meta.fields[name]
-                length = field.guess_length(data)
-                setattr(self, name, field.decode(data[:length]))
-            data = data[length:]
-        if len(data):
-            raise RemainingDataException(data)
+                setattr(self, name, field.decode(self._data))
+        if len(self._data):
+            raise RemainingDataException(self._data)
 
     def __repr__(self):
         values = ("=".join([field_name, str(getattr(self, field_name))])
@@ -110,14 +120,18 @@ class Packet(six.with_metaclass(PacketBase)):
         return "{}({})".format(type(self).__name__, ", ".join(values))
 
 
-class MagicField(Field):
-    def guess_length(self, data):
-        return len(MAGIC)
+class MagicField(fields.Field):
 
-    def decode(self, data):
-        raise NotImplementedError()
+    @classmethod
+    @convert_to_stream("data")
+    def decode(cls, data):
+        value = data.read(len(MAGIC))
+        if value != MAGIC:
+            raise ValueError()
+        return ""
 
-    def encode(self, value):
+    @classmethod
+    def encode(cls, value):
         return MAGIC
 
 

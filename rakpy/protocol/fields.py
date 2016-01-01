@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 from struct import pack, unpack
+from collections import namedtuple
+
+from rakpy.io import convert_to_stream
+
+Address = namedtuple("Address", "ip port version")
+Address.__new__.__defaults__ = (None, None, 4)
 
 
 class Field(object):
@@ -7,10 +13,6 @@ class Field(object):
 
     def contribute_to_class(self, cls, name):
         cls._meta.add_field(self, name)
-
-    @classmethod
-    def guess_length(cls, data):
-        return cls.LENGTH
 
     @classmethod
     def decode(cls, data):
@@ -34,8 +36,9 @@ class NumericField(Field):
         raise NotImplementedError()
 
     @classmethod
+    @convert_to_stream("data")
     def decode(cls, data):
-        return unpack(cls.PACK_FORMAT, data)[0]
+        return unpack(cls.PACK_FORMAT, data.read(cls.LENGTH))[0]
 
     @classmethod
     def encode(cls, value):
@@ -89,8 +92,9 @@ class TriadField(UnsignedNumericField):
     PACK_FORMAT = "!I"
 
     @classmethod
+    @convert_to_stream("data")
     def decode(cls, data):
-        return super(TriadField, cls).decode(b'\x00' + data)
+        return unpack(cls.PACK_FORMAT, "\x00" + data.read(cls.LENGTH))[0]
 
     @classmethod
     def encode(cls, value):
@@ -151,38 +155,64 @@ class BoolField(Field):
 
 
 class StringField(Field):
-    LENGTH_FIELD = UnsignedShortField
-
     @classmethod
-    def guess_length(cls, data):
-        # encoded data length + actual data
-        return cls.LENGTH_FIELD.LENGTH + cls.LENGTH_FIELD.decode(data[:cls.LENGTH_FIELD.LENGTH])
-
-    @classmethod
+    @convert_to_stream("data")
     def decode(cls, data):
-        return data[cls.LENGTH_FIELD.LENGTH:].decode("utf-8")
+        length = UnsignedShortField.decode(data)
+        return data.read(length).decode("utf-8")
 
     @classmethod
     def encode(cls, value):
         value = value.encode("utf-8")
-        return cls.LENGTH_FIELD.encode(len(value)) + value
+        return UnsignedShortField.encode(len(value)) + value
 
 
 class OptionsField(Field):
     LENGTH = 1
 
     @classmethod
+    @convert_to_stream("data")
     def decode(cls, data):
-        options = dict()
-        options['reliability'] = (ord(data) & 0b11100000) >> 5
-        options['has_split'] = bool(ord(data) & 0b00010000)
-        return options
+        bits = ord(data.read(1))
+        return {
+            "reliability": (bits & 0b11100000) >> 5,
+            "has_split": bool(bits & 0b00010000)
+        }
 
     @classmethod
     def encode(cls, options):
         data = 0b00000000
-        if options.get('has_split', False):
+        if options.get("has_split", False):
             data |= 0b00010000
-        reliability = options.get('reliability', 0x00) << 5
+        reliability = options.get("reliability", 0x00) << 5
         data |= reliability
         return chr(data)
+
+
+class AddressField(Field):
+    LENGTH = (1 + 4) * UnsignedByteField.LENGTH + 2 * UnsignedShortField.LENGTH
+
+    @classmethod
+    @convert_to_stream("data")
+    def decode(cls, data):
+        # version
+        version = UnsignedByteField.decode(data)
+        # ip
+        ip = []
+        for part in range(4):
+            ip.append(UnsignedByteField.decode(data))
+        ip = ".".join(str(part) for part in ip)
+        # port
+        port = UnsignedShortField.decode(data)
+        return Address(version=version, ip=ip, port=port)
+
+    @classmethod
+    def encode(cls, address):
+        # version
+        data = UnsignedByteField.encode(address.version)
+        # ip
+        for part in address.ip.split("."):
+            data += UnsignedByteField.encode(int(part))
+        # port
+        data += UnsignedShortField.encode(address.port)
+        return data

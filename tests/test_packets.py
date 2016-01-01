@@ -22,7 +22,7 @@ def test_packet_id():
     assert packet.id == 0x42
 
 
-def test_unconnected_ping():
+def test_decode_unconnected_ping():
 
     # invalid packet id
     with pytest.raises(ValueError):

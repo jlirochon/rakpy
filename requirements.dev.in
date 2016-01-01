@@ -1,6 +1,8 @@
 ipython
 pytest
+pytest-mock
 pytest-pep8
 pytest-cov
 PyYAML
 Jinja2
+inflection
