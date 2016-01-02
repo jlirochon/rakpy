@@ -64,6 +64,32 @@
             "name": "open_connection_reply_1"
         }, 
         {
+            "type": "packet", 
+            "id": "\\x08", 
+            "structure": [
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "server_id"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "address"
+                }, 
+                {
+                    "type": "unsigned_short", 
+                    "name": "mtu_size"
+                }, 
+                {
+                    "type": "bool", 
+                    "name": "use_security"
+                }
+            ], 
+            "name": "open_connection_reply_2"
+        }, 
+        {
             "id": "\\x00", 
             "structure": [
                 {

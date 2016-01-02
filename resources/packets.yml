@@ -61,10 +61,17 @@ packets:
       - { type: unsigned_short, name: mtu_size }
 
 
-#  # OPEN_CONNECTION_REPLY_2
-#  - id: \x08
-#    type: packet
-#    name: open_connection_reply_2
+  # OPEN_CONNECTION_REPLY_2
+  - id: \x08
+    type: packet
+    name: open_connection_reply_2
+    structure:
+      - { type: __magic__ }
+      - { type: long_long, name: server_id }
+      - { type: address, name: address }
+      - { type: unsigned_short, name: mtu_size }
+      - { type: bool, name: use_security }
+
 
 #  # OPEN_CONNECTION_REQUEST_1
 #  - id: \x05
