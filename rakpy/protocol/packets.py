@@ -10,50 +10,50 @@ from rakpy.protocol import Packet
 @registry.add
 class AdvertiseSystem(Packet):
     ping_id = fields.LongLongField()
-    server_id = fields.LongLongField()
+    server_guid = fields.LongLongField()
     server_name = fields.StringField()
 
     class Meta(object):
         id = 0x1d
-        structure = ("ping_id", "server_id", "__magic__", "server_name")
+        structure = ("ping_id", "server_guid", "__magic__", "server_name")
 
 
 @registry.add
-class ClientConnect(Packet):
-    client_id = fields.LongLongField()
+class ConnectionRequest(Packet):
+    client_guid = fields.LongLongField()
     send_ping = fields.LongLongField()
     use_security = fields.BoolField()
 
     class Meta(object):
         id = 0x09
-        structure = ("client_id", "send_ping", "use_security")
+        structure = ("client_guid", "send_ping", "use_security")
 
 
 @registry.add
 class OpenConnectionReply1(Packet):
-    server_id = fields.LongLongField()
+    server_guid = fields.LongLongField()
     use_security = fields.BoolField()
     mtu_size = fields.UnsignedShortField()
 
     class Meta(object):
         id = 0x06
-        structure = ("__magic__", "server_id", "use_security", "mtu_size")
+        structure = ("__magic__", "server_guid", "use_security", "mtu_size")
 
 
 @registry.add
 class OpenConnectionReply2(Packet):
-    server_id = fields.LongLongField()
+    server_guid = fields.LongLongField()
     address = fields.AddressField()
     mtu_size = fields.UnsignedShortField()
     use_security = fields.BoolField()
 
     class Meta(object):
         id = 0x08
-        structure = ("__magic__", "server_id", "address", "mtu_size", "use_security")
+        structure = ("__magic__", "server_guid", "address", "mtu_size", "use_security")
 
 
 @registry.add
-class PingData(Packet):
+class ConnectedPing(Packet):
     ping_id = fields.LongLongField()
 
     class Meta(object):
@@ -62,7 +62,7 @@ class PingData(Packet):
 
 
 @registry.add
-class PongData(Packet):
+class ConnectedPong(Packet):
     ping_id = fields.LongLongField()
 
     class Meta(object):
@@ -73,29 +73,29 @@ class PongData(Packet):
 @registry.add
 class UnconnectedPing(Packet):
     ping_id = fields.LongLongField()
-    client_id = fields.LongLongField()
+    client_guid = fields.LongLongField()
 
     class Meta(object):
         id = 0x01
-        structure = ("ping_id", "__magic__", "client_id")
+        structure = ("ping_id", "__magic__", "client_guid")
 
 
 @registry.add
 class UnconnectedPingOpenConnections(Packet):
     ping_id = fields.LongLongField()
-    client_id = fields.LongLongField()
+    client_guid = fields.LongLongField()
 
     class Meta(object):
         id = 0x02
-        structure = ("ping_id", "__magic__", "client_id")
+        structure = ("ping_id", "__magic__", "client_guid")
 
 
 @registry.add
 class UnconnectedPong(Packet):
     ping_id = fields.LongLongField()
-    server_id = fields.LongLongField()
+    server_guid = fields.LongLongField()
     server_name = fields.StringField()
 
     class Meta(object):
         id = 0x1c
-        structure = ("ping_id", "server_id", "__magic__", "server_name")
+        structure = ("ping_id", "server_guid", "__magic__", "server_name")

@@ -6,21 +6,24 @@ packets:
 #    name: ack
 
   # ADVERTISE_SYSTEM
+  # Inform a remote system of our IP/Port.
+  # On the recipient, all data past ID_ADVERTISE_SYSTEM is whatever was passed to the data parameter.
   - id: \x1d
     type: packet
     name: advertise_system
     structure:
-      - { type: long_long, name: ping_id }
-      - { type: long_long, name: server_id }
+      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      - { type: long_long, name: server_guid }
       - { type: __magic__ }
       - { type: string, name: server_name }
 
-  # CLIENT_CONNECT_DataPacket
+  # CONNECTION_REQUEST (Client to Server)
+  # Header(1), GUID(8), Timestamp, HasSecurity(1), Proof(32)
   - id: \x09
-    name: client_connect
+    name: connection_request
     type: data_packet
     structure:
-      - { type: long_long, name: client_id }
+      - { type: long_long, name: client_guid }
       - { type: long_long, name: send_ping }
       - { type: bool, name: use_security }
 
@@ -50,24 +53,27 @@ packets:
 #    type: acknowledge_packet
 #    name: nack
 
-  # OPEN_CONNECTION_REPLY_1
+  # OPEN_CONNECTION_REPLY_1 (Server to Client)
+  # Header(1), OfflineMesageID(16), server GUID(8), HasSecurity(1), Cookie(4, if HasSecurity),
+  # public key (if do security is true), MTU(2)
   - id: \x06
     type: packet
     name: open_connection_reply_1
     structure:
       - { type: __magic__ }
-      - { type: long_long, name: server_id }
+      - { type: long_long, name: server_guid }
       - { type: bool, name: use_security }
       - { type: unsigned_short, name: mtu_size }
 
 
-  # OPEN_CONNECTION_REPLY_2
+  # OPEN_CONNECTION_REPLY_2 (Server To Client)
+  # Header(1), OfflineMesageID(16), server GUID(8), mtu(2), doSecurity(1 bit), handshakeAnswer (if do security is true)
   - id: \x08
     type: packet
     name: open_connection_reply_2
     structure:
       - { type: __magic__ }
-      - { type: long_long, name: server_id }
+      - { type: long_long, name: server_guid }
       - { type: address, name: address }
       - { type: unsigned_short, name: mtu_size }
       - { type: bool, name: use_security }
@@ -93,17 +99,20 @@ packets:
 #      - { type: unsigned_short, name: mtu_size }
 #      - { type: long_long, name: client_id }
 
-  # PING_DataPacket
+  # CONNECTED_PING
+  # Ping from a connected system.  Update timestamps (internal use only)
   - id: \x00
-    name: ping_data
+    name: connected_ping
     structure:
-      - { type: long_long, name: ping_id }
+      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
 
-  # PONG_DataPacket
+  # CONNECTED_PONG
+  # Pong from a connected system.
+  # Update timestamps (internal use only)
   - id: \x03
-    name: pong_data
+    name: connected_pong
     structure:
-      - { type: long_long, name: ping_id }
+      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
 
 #  # SERVER_HANDSHAKE_DataPacket
 #  - id: \x10
@@ -113,26 +122,34 @@ packets:
 #      - { type: port, name: port }
 
   # UNCONNECTED_PING
+  # Ping from an unconnected system.
+  # Reply but do not update timestamps (internal use only)
   - id: \x01
     name: unconnected_ping
     structure:
-      - { type: long_long, name: ping_id }
+      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
       - { type: __magic__ }
-      - { type: long_long, name: client_id }
+      - { type: long_long, name: client_guid }
 
   # UNCONNECTED_PING_OPEN_CONNECTIONS
+  # Ping from an unconnected system.
+  # Only reply if we have open connections.
+  # Do not update timestamps (internal use only)
   - id: \x02
     name: unconnected_ping_open_connections
     structure:
-      - { type: long_long, name: ping_id }
+      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
       - { type: __magic__ }
-      - { type: long_long, name: client_id }
+      - { type: long_long, name: client_guid }
 
   # UNCONNECTED_PONG
+  # Pong from an unconnected system.  First byte is ID_UNCONNECTED_PONG, second sizeof(RakNet::TimeMS) bytes
+  # is the ping, following bytes is system specific enumeration data. Read using bitstreams.
   - id: \x1c
     name: unconnected_pong
     structure:
-      - { type: long_long, name: ping_id }
-      - { type: long_long, name: server_id }
+      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      # enumeration data below. todo: is this MC specific ?
+      - { type: long_long, name: server_guid }
       - { type: __magic__ }
       - { type: string, name: server_name }
