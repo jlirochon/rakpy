@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from rakpy.io import ByteStream
+from rakpy.io import ByteStream, convert_to_stream
 
 
 def test_seek_set():
@@ -76,6 +76,11 @@ def test_read():
     assert stream.read() == data
     assert stream.tell() == len(data)
 
+    # read 0 bytes
+    assert stream.seek(0) == 0
+    assert stream.read(0) == ""
+    assert stream.tell() == 0
+
     # read 1 byte
     assert stream.seek(0) == 0
     for i in range(len(data)):
@@ -125,3 +130,28 @@ def test_len():
         read = stream.read(3)
         expected_length -= len(read)
         assert len(stream) == expected_length
+
+
+def test_convert_to_stream():
+
+    class TestHelper(object):
+
+        @convert_to_stream("data")
+        def test(self, data):
+            return data
+
+        @convert_to_stream("foo")
+        def test_invalid(self, bar):
+            return bar
+
+    data = "\x01\x02\x03\x04\x05"
+
+    helper = TestHelper()
+
+    stream = helper.test(data)
+    assert type(stream) == ByteStream
+    assert stream.readall() == data
+
+    # argument name mismatch
+    stream = helper.test_invalid(data)
+    assert stream == data
