@@ -34,8 +34,8 @@ def test_decode_unconnected_ping():
     )
     packet = UnconnectedPing(data)
     assert packet.ping_id == 193351
-    assert packet.client_id == 1450258689827747
-    assert unicode(packet) == "UnconnectedPing(ping_id=193351, client_id=1450258689827747)"
+    assert packet.client_guid == 1450258689827747
+    assert unicode(packet) == "UnconnectedPing(ping_id=193351, client_guid=1450258689827747)"
 
 
 def test_decode_packet():
