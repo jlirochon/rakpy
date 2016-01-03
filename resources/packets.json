@@ -112,6 +112,49 @@
             "name": "open_connection_reply_2"
         }, 
         {
+            "type": "packet", 
+            "id": "\\x05", 
+            "structure": [
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "byte", 
+                    "name": "protocol"
+                }, 
+                {
+                    "type": "padding", 
+                    "name": "mtu_size", 
+                    "options": {
+                        "offset": 18
+                    }
+                }
+            ], 
+            "name": "open_connection_request_1"
+        }, 
+        {
+            "type": "packet", 
+            "id": "\\x07", 
+            "structure": [
+                {
+                    "type": "__magic__"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "server_address"
+                }, 
+                {
+                    "type": "unsigned_short", 
+                    "name": "mtu_size"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "client_guid"
+                }
+            ], 
+            "name": "open_connection_request_2"
+        }, 
+        {
             "id": "\\x00", 
             "structure": [
                 {

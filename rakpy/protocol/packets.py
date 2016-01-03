@@ -71,6 +71,27 @@ class OpenConnectionReply2(Packet):
 
 
 @registry.add
+class OpenConnectionRequest1(Packet):
+    protocol = fields.ByteField()
+    mtu_size = fields.PaddingField(offset=18)
+
+    class Meta(object):
+        id = 0x05
+        structure = ("__magic__", "protocol", "mtu_size")
+
+
+@registry.add
+class OpenConnectionRequest2(Packet):
+    server_address = fields.AddressField()
+    mtu_size = fields.UnsignedShortField()
+    client_guid = fields.LongLongField()
+
+    class Meta(object):
+        id = 0x07
+        structure = ("__magic__", "server_address", "mtu_size", "client_guid")
+
+
+@registry.add
 class ConnectedPing(Packet):
     ping_id = fields.LongLongField()
 

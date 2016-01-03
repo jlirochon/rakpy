@@ -84,26 +84,28 @@ packets:
       - { type: unsigned_short, name: mtu_size }
       - { type: bool, name: use_security }
 
+  # OPEN_CONNECTION_REQUEST_1 (Client to Server)
+  # Initial query: Header(1), OfflineMesageID(16), Protocol number(1), Pad(toMTU), sent with no fragment set.
+  # If protocol fails on server, returns INCOMPATIBLE_PROTOCOL_VERSION to client.
+  - id: \x05
+    type: packet
+    name: open_connection_request_1
+    structure:
+      - { type: __magic__ }
+      - { type: byte, name: protocol }
+      - { type: padding, name: mtu_size, options: { offset: 18 } }  # 1 + 16 + 1
 
-#  # OPEN_CONNECTION_REQUEST_1
-#  - id: \x05
-#    type: packet
-#    name: open_connection_request_1
-#    structure:
-#      - { type: __magic__ }
-#      - { type: byte, name: protocol }
-#      # padding with \x00 until complete packet = mtu_size
-#      - { type: ????, name: mtu_size }
-
-#  # OPEN_CONNECTION_REQUEST_2
-#  - id: \x07
-#    type: packet
-#    name: open_connection_request_2
-#    structure:
-#      - { type: __magic__ }
-#      - { type: address, name: server_address }
-#      - { type: unsigned_short, name: mtu_size }
-#      - { type: long_long, name: client_id }
+  # OPEN_CONNECTION_REQUEST_2 (Client to Server)
+  # Header(1), OfflineMesageID(16), Cookie(4, if HasSecurity is true on the server), clientSupportsSecurity(1 bit)
+  # handshakeChallenge (if has security on both server and client), remoteBindingAddress(6), MTU(2), client GUID(8)
+  - id: \x07
+    type: packet
+    name: open_connection_request_2
+    structure:
+      - { type: __magic__ }
+      - { type: address, name: server_address }
+      - { type: unsigned_short, name: mtu_size }
+      - { type: long_long, name: client_guid }
 
   # CONNECTED_PING
   # Ping from a connected system.  Update timestamps (internal use only)

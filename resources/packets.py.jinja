@@ -11,7 +11,7 @@ from rakpy.protocol import Packet
 @registry.add
 class {{ packet.class }}(Packet):
 {% for field in packet.fields %}
-    {{ field.name }} = fields.{{ field.class }}()
+    {{ field.name }} = fields.{{ field.class }}({% for key, value in field.options.iteritems() %}{{ key }}={{ value }}{% if not loop.last %},{% endif %}{% endfor %})
 {% endfor %}
 
     class Meta(object):

@@ -20,7 +20,8 @@ def process_packets(data):
             new_packet["structure"].append(field["name"])
             new_packet["fields"].append({
                 "name": field["name"],
-                "class": camelize("{}_field".format(field["type"]))
+                "class": camelize("{}_field".format(field["type"])),
+                "options": field.get("options", dict())
             })
         packets.append(new_packet)
     return packets
