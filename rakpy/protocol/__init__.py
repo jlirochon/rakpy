@@ -28,10 +28,11 @@ registry = PacketRegistry()
 
 @convert_to_stream("data")
 def decode_packet(data):
+    packet_id = ord(data[0])
     try:
-        packet_class = registry[ord(data[0])]
+        packet_class = registry[packet_id]
     except KeyError:
-        raise UnknownPacketException
+        raise UnknownPacketException(hex(packet_id))
     return packet_class(data)
 
 
@@ -103,9 +104,9 @@ class Packet(six.with_metaclass(PacketBase)):
     def _decode(self):
         for name in self._get_structure():
             if name == "__id__":
-                packet_id = fields.ByteField.decode(self._data)
+                packet_id = fields.UnsignedByteField.decode(self._data)
                 if not self._check_id(packet_id):
-                    raise ValueError
+                    raise ValueError()
             elif name == "__magic__":
                 MagicField.decode(self._data)
             else:
