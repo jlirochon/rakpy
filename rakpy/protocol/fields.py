@@ -244,3 +244,16 @@ class RangeListField(Field):
             if not min_equals_max:
                 data += TriadField.encode(range_.max_index)
         return data
+
+
+class PaddingField(Field):
+
+    def __init__(self, offset=0):
+        self._offset = offset
+
+    @convert_to_stream("data")
+    def decode(self, data):
+        return len(data.readall()) + self._offset
+
+    def encode(self, value):
+        return max(0, value - self._offset) * "\x00"

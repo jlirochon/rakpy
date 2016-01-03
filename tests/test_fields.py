@@ -294,7 +294,28 @@ range_list_field_data = [
 
 
 @pytest.mark.parametrize("decoded,encoded", range_list_field_data)
-def test_address_field(encoded, decoded):
+def test_range_list_field(encoded, decoded):
     field = fields.RangeListField()
+    assert field.encode(decoded) == encoded
+    assert field.decode(encoded) == decoded
+
+
+padding_field_data = [
+    (0, 0, ""),
+    (0, 1, "\x00"),
+    (0, 5, "\x00\x00\x00\x00\x00"),
+    (0, 20, "\x00" * 20),
+    (0, 1500, "\x00" * 1500),
+    (18, 18, ""),
+    (18, 19, "\x00"),
+    (18, 23, "\x00\x00\x00\x00\x00"),
+    (18, 20, "\x00" * 2),
+    (18, 1500, "\x00" * 1482),
+]
+
+
+@pytest.mark.parametrize("offset,decoded,encoded", padding_field_data)
+def test_padding_field(offset, encoded, decoded):
+    field = fields.PaddingField(offset=offset)
     assert field.encode(decoded) == encoded
     assert field.decode(encoded) == decoded
