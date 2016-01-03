@@ -16,7 +16,7 @@ class {{ packet.class }}(Packet):
 
     class Meta(object):
         id = {{ packet.id }}
-        structure = ({% for name in packet.structure %}"{{ name }}"{% if not loop.last %}, {% endif %}{% endfor %})
+        structure = ({% for name in packet.structure %}"{{ name }}"{% if loop.length == 1 or not loop.last %},{% endif %}{% if not loop.last %} {% endif %}{% endfor %})
 {% if not loop.last %}
 
 

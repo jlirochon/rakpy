@@ -8,6 +8,24 @@ from rakpy.protocol import Packet
 
 
 @registry.add
+class Acknowledge(Packet):
+    packet_ranges = fields.RangeListField()
+
+    class Meta(object):
+        id = 0xc0
+        structure = ("packet_ranges",)
+
+
+@registry.add
+class Unacknowledge(Packet):
+    packet_ranges = fields.RangeListField()
+
+    class Meta(object):
+        id = 0xa0
+        structure = ("packet_ranges",)
+
+
+@registry.add
 class AdvertiseSystem(Packet):
     ping_id = fields.LongLongField()
     server_guid = fields.LongLongField()
@@ -58,7 +76,7 @@ class ConnectedPing(Packet):
 
     class Meta(object):
         id = 0x00
-        structure = ("ping_id")
+        structure = ("ping_id",)
 
 
 @registry.add
@@ -67,7 +85,7 @@ class ConnectedPong(Packet):
 
     class Meta(object):
         id = 0x03
-        structure = ("ping_id")
+        structure = ("ping_id",)
 
 
 @registry.add

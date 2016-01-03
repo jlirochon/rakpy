@@ -2,6 +2,28 @@
     "packets": [
         {
             "type": "packet", 
+            "id": "\\xc0", 
+            "structure": [
+                {
+                    "type": "range_list", 
+                    "name": "packet_ranges"
+                }
+            ], 
+            "name": "acknowledge"
+        }, 
+        {
+            "type": "packet", 
+            "id": "\\xa0", 
+            "structure": [
+                {
+                    "type": "range_list", 
+                    "name": "packet_ranges"
+                }
+            ], 
+            "name": "unacknowledge"
+        }, 
+        {
+            "type": "packet", 
             "id": "\\x1d", 
             "structure": [
                 {

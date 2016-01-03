@@ -1,9 +1,20 @@
 packets:
 
-#  # ACK
-#  - id: \xc0
-#    type: acknowledge_packet
-#    name: ack
+  # ACKNOWLEDGE
+  # \xc0 is not a real packet id, it's 0b11000000, a DatagramHeaderFormat with isValid and isACK flags
+  - id: \xc0
+    type: packet
+    name: acknowledge
+    structure:
+      - { type: range_list, name: packet_ranges }
+
+  # UNACKNOWLEDGE
+  # \xa0 is not a real packet id, it's 0b10100000, a DatagramHeaderFormat with isValid and isNAK flags
+  - id: \xa0
+    type: packet
+    name: unacknowledge
+    structure:
+      - { type: range_list, name: packet_ranges }
 
   # ADVERTISE_SYSTEM
   # Inform a remote system of our IP/Port.
@@ -47,11 +58,6 @@ packets:
   # DATA_PACKET_D
   # DATA_PACKET_E
   # DATA_PACKET_F
-
-#  # NACK
-#  - id: \xa0
-#    type: acknowledge_packet
-#    name: nack
 
   # OPEN_CONNECTION_REPLY_1 (Server to Client)
   # Header(1), OfflineMesageID(16), server GUID(8), HasSecurity(1), Cookie(4, if HasSecurity),
