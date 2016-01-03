@@ -65,6 +65,71 @@
         }, 
         {
             "type": "packet", 
+            "id": "\\x15", 
+            "structure": [], 
+            "name": "disconnection_notification"
+        }, 
+        {
+            "type": "packet", 
+            "id": "\\x13", 
+            "structure": [
+                {
+                    "type": "address", 
+                    "name": "address"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_0"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_1"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_2"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_3"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_4"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_5"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_6"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_7"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_8"
+                }, 
+                {
+                    "type": "address", 
+                    "name": "system_address_9"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "send_ping"
+                }, 
+                {
+                    "type": "long_long", 
+                    "name": "send_pong"
+                }
+            ], 
+            "name": "new_incoming_connection"
+        }, 
+        {
+            "type": "packet", 
             "id": "\\x06", 
             "structure": [
                 {

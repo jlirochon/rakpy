@@ -48,6 +48,35 @@ class ConnectionRequest(Packet):
 
 
 @registry.add
+class DisconnectionNotification(Packet):
+
+    class Meta(object):
+        id = 0x15
+        structure = ()
+
+
+@registry.add
+class NewIncomingConnection(Packet):
+    address = fields.AddressField()
+    system_address_0 = fields.AddressField()
+    system_address_1 = fields.AddressField()
+    system_address_2 = fields.AddressField()
+    system_address_3 = fields.AddressField()
+    system_address_4 = fields.AddressField()
+    system_address_5 = fields.AddressField()
+    system_address_6 = fields.AddressField()
+    system_address_7 = fields.AddressField()
+    system_address_8 = fields.AddressField()
+    system_address_9 = fields.AddressField()
+    send_ping = fields.LongLongField()
+    send_pong = fields.LongLongField()
+
+    class Meta(object):
+        id = 0x13
+        structure = ("address", "system_address_0", "system_address_1", "system_address_2", "system_address_3", "system_address_4", "system_address_5", "system_address_6", "system_address_7", "system_address_8", "system_address_9", "send_ping", "send_pong")
+
+
+@registry.add
 class OpenConnectionReply1(Packet):
     server_guid = fields.LongLongField()
     use_security = fields.BoolField()

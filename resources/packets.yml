@@ -38,9 +38,33 @@ packets:
       - { type: long_long, name: send_ping }
       - { type: bool, name: use_security }
 
-  # CLIENT_DISCONNECT_DataPacket
+  # DISCONNECTION_NOTIFICATION
+  # The system specified in Packet::systemAddress has disconnected from us.
+  # For the client, this would mean the server has shutdown.
+  - id: \x15
+    name: disconnection_notification
+    type: packet
+    structure: []
 
-  # CLIENT_HANDSHAKE_DataPacket
+  # NEW_INCOMING_CONNECTION
+  # A remote system has successfully connected.
+  - id: \x13
+    name: new_incoming_connection
+    type: packet
+    structure:
+      - { type: address, name: address }
+      - { type: address, name: system_address_0 }
+      - { type: address, name: system_address_1 }
+      - { type: address, name: system_address_2 }
+      - { type: address, name: system_address_3 }
+      - { type: address, name: system_address_4 }
+      - { type: address, name: system_address_5 }
+      - { type: address, name: system_address_6 }
+      - { type: address, name: system_address_7 }
+      - { type: address, name: system_address_8 }
+      - { type: address, name: system_address_9 }
+      - { type: long_long, name: send_ping }
+      - { type: long_long, name: send_pong }
 
   # DATA_PACKET_0
   # DATA_PACKET_1
@@ -70,7 +94,6 @@ packets:
       - { type: long_long, name: server_guid }
       - { type: bool, name: use_security }
       - { type: unsigned_short, name: mtu_size }
-
 
   # OPEN_CONNECTION_REPLY_2 (Server To Client)
   # Header(1), OfflineMesageID(16), server GUID(8), mtu(2), doSecurity(1 bit), handshakeAnswer (if do security is true)
@@ -122,7 +145,8 @@ packets:
     structure:
       - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
 
-#  # SERVER_HANDSHAKE_DataPacket
+#  # CONNECTION_REQUEST_ACCEPTED
+#  # In a client/server environment, our connection request to the server has been accepted.
 #  - id: \x10
 #    name: server_handshake_data
 #    structure:
