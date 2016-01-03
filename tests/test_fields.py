@@ -2,7 +2,7 @@
 import pytest
 
 from rakpy.protocol import fields
-from rakpy.protocol.fields import Address
+from rakpy.protocol.fields import Address, Range
 
 
 def test_byte_field():
@@ -271,13 +271,30 @@ def test_options_field(encoded, decoded):
 
 
 address_field_data = [
-    (Address(ip="127.0.0.1", port=19132, version=4), b"\x04\x7f\x00\x00\x01\x4a\xbc"),
-    (Address(ip="192.168.0.42", port=29132, version=4), b"\x04\xc0\xa8\x00\x2a\x71\xcc")
+    (Address(ip="127.0.0.1", port=19132, version=4), "\x04\x7f\x00\x00\x01\x4a\xbc"),
+    (Address(ip="192.168.0.42", port=29132, version=4), "\x04\xc0\xa8\x00\x2a\x71\xcc")
 ]
 
 
 @pytest.mark.parametrize("decoded,encoded", address_field_data)
 def test_address_field(encoded, decoded):
     field = fields.AddressField()
+    assert field.encode(decoded) == encoded
+    assert field.decode(encoded) == decoded
+
+
+range_list_field_data = [
+    ([Range(min_index=0, max_index=0)], "\x00\x01\x01\x00\x00\x00"),
+    ([Range(min_index=65536, max_index=327680)], "\x00\x01\x00\x01\x00\x00\x05\x00\x00"),
+    ([Range(min_index=851968, max_index=917504)], "\x00\x01\x00\x0d\x00\x00\x0e\x00\x00"),
+    ([Range(min_index=5373952, max_index=5373952), Range(min_index=7471104, max_index=7536640)],
+        "\x00\x02\x01\x52\x00\x00\x00\x72\x00\x00\x73\x00\x00"),
+    ([Range(min_index=9568256, max_index=9568256)], "\x00\x01\x01\x92\x00\x00"),
+]
+
+
+@pytest.mark.parametrize("decoded,encoded", range_list_field_data)
+def test_address_field(encoded, decoded):
+    field = fields.RangeListField()
     assert field.encode(decoded) == encoded
     assert field.decode(encoded) == decoded

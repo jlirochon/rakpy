@@ -7,6 +7,8 @@ from rakpy.io import convert_to_stream
 Address = namedtuple("Address", "ip port version")
 Address.__new__.__defaults__ = (None, None, 4)
 
+Range = namedtuple("Range", "min_index max_index")
+
 
 class Field(object):
     LENGTH = None
@@ -215,4 +217,30 @@ class AddressField(Field):
             data += UnsignedByteField.encode(int(part))
         # port
         data += UnsignedShortField.encode(address.port)
+        return data
+
+
+class RangeListField(Field):
+
+    @classmethod
+    @convert_to_stream("data")
+    def decode(cls, data):
+        range_list = []
+        length = UnsignedShortField.decode(data)
+        for i in range(length):
+            min_equals_max = BoolField.decode(data)
+            min_index = TriadField.decode(data)
+            max_index = min_index if min_equals_max else max(TriadField.decode(data), min_index + 512)
+            range_list.append(Range(min_index=min_index, max_index=max_index))
+        return range_list
+
+    @classmethod
+    def encode(cls, range_list):
+        data = UnsignedShortField.encode(len(range_list))
+        for range_ in range_list:
+            min_equals_max = range_.min_index == range_.max_index
+            data += BoolField.encode(min_equals_max)
+            data += TriadField.encode(range_.min_index)
+            if not min_equals_max:
+                data += TriadField.encode(range_.max_index)
         return data
