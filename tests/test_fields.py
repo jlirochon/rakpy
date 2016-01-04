@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 
+from rakpy.io import EndOfStreamException
 from rakpy.protocol import fields
 from rakpy.protocol.fields import Address, Range
 
@@ -186,6 +187,14 @@ def test_string_field():
     # unicode
     assert field.encode(u"ボールト") == "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     assert field.decode("\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88") == u"ボールト"
+
+    # raise if data is empty
+    with pytest.raises(EndOfStreamException):
+        field.decode("")
+
+    # do not raise if required=False
+    field = fields.StringField(required=False)
+    assert field.decode("") is None
 
 
 def test_float_field():

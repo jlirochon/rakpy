@@ -2,7 +2,7 @@
 from struct import pack, unpack
 from collections import namedtuple
 
-from rakpy.io import convert_to_stream
+from rakpy.io import convert_to_stream, EndOfStreamException
 
 Address = namedtuple("Address", "ip port version")
 Address.__new__.__defaults__ = (None, None, 4)
@@ -160,10 +160,15 @@ class BoolField(Field):
 
 
 class StringField(Field):
-    @classmethod
+
     @convert_to_stream("data")
-    def decode(cls, data):
-        length = UnsignedShortField.decode(data)
+    def decode(self, data):
+        try:
+            length = UnsignedShortField.decode(data)
+        except EndOfStreamException:
+            if self._options.get("required", True):
+                raise
+            return None
         return data.read(length).decode("utf-8")
 
     @classmethod

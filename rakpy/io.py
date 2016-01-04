@@ -2,6 +2,10 @@
 import os
 
 
+class EndOfStreamException(Exception):
+    pass
+
+
 class ByteStream(object):
 
     def __init__(self, data):
@@ -16,7 +20,10 @@ class ByteStream(object):
         else:
             offset = self._offset
             self.seek(size, os.SEEK_CUR)
-            return self._buffer[offset:offset+size].tobytes()
+            data = self._buffer[offset:offset+size].tobytes()
+            if not len(data):
+                raise EndOfStreamException()
+            return data
 
     def readall(self):
         offset = self._offset
