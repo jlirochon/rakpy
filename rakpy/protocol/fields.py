@@ -13,6 +13,9 @@ Range = namedtuple("Range", "min_index max_index")
 class Field(object):
     LENGTH = None
 
+    def __init__(self, **options):
+        self._options = options
+
     def contribute_to_class(self, cls, name):
         cls._meta.add_field(self, name)
 
@@ -248,12 +251,11 @@ class RangeListField(Field):
 
 class PaddingField(Field):
 
-    def __init__(self, offset=0):
-        self._offset = offset
-
     @convert_to_stream("data")
     def decode(self, data):
-        return len(data.readall()) + self._offset
+        offset = self._options.get('offset', 0)
+        return len(data.readall()) + offset
 
     def encode(self, value):
-        return max(0, value - self._offset) * "\x00"
+        offset = self._options.get('offset', 0)
+        return max(0, value - offset) * "\x00"
