@@ -12,6 +12,7 @@ Pythonic implementation of the [RakNet](https://github.com/OculusVR/RakNet) prot
 * Provide a pythonic interface (other projects exist but they feel like Java or PHP)
 * Provide a decent test suite
 * Parts of the code are generated from YAML files (so we can move fast by tweaking YAML, and we can share this with other projects)
+* Cover enough to implement a MCPE server
 
 ## Usage
 
@@ -34,7 +35,7 @@ In [6]: packet.client_id
 1450258689827747
 ```
 
-### Encoding packets (not working yet)
+### Encoding packets (not implemented yet)
 
 ```python
 In [1]: from rakpy.protocol.packets import UnconnectedPing
