@@ -2,8 +2,48 @@
 import pytest
 
 from rakpy.io import EndOfStreamException
-from rakpy.protocol import fields
+from rakpy.protocol import fields, MagicField
+from rakpy.protocol.const import MAGIC
 from rakpy.protocol.fields import Address, Range
+
+
+def test_not_implemented_methods():
+
+    class TestField(fields.Field):
+        pass
+
+    field = TestField()
+    with pytest.raises(NotImplementedError):
+        field.decode(None)
+    with pytest.raises(NotImplementedError):
+        field.encode(None)
+
+
+    class TestNumericField(fields.NumericField):
+        pass
+
+    field = TestNumericField()
+    with pytest.raises(NotImplementedError):
+        field.get_min_value()
+    with pytest.raises(NotImplementedError):
+        field.get_max_value()
+
+
+def test_magic_field():
+
+    field = MagicField()
+
+    # decode valid data
+    assert field.decode(MAGIC) == ""
+
+    # decode invalid data
+    with pytest.raises(ValueError):
+        field.decode(16 * "\x42")
+
+    # encode
+    assert field.encode("") == MAGIC
+    assert field.encode("\x42") == MAGIC
+    assert field.encode("whatever") == MAGIC
 
 
 def test_byte_field():
