@@ -162,7 +162,7 @@ class UnconnectedPingOpenConnections(Packet):
 class UnconnectedPong(Packet):
     ping_id = fields.LongLongField()
     server_guid = fields.LongLongField()
-    server_name = fields.StringField()
+    server_name = fields.StringField(required=False)
 
     class Meta(object):
         id = 0x1c

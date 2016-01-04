@@ -289,7 +289,10 @@
                 }, 
                 {
                     "type": "string", 
-                    "name": "server_name"
+                    "name": "server_name", 
+                    "options": {
+                        "required": false
+                    }
                 }
             ], 
             "name": "unconnected_pong"
