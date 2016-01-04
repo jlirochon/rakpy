@@ -2,6 +2,7 @@
 import pytest
 
 from rakpy.protocol import decode_packet
+from rakpy.protocol.exceptions import UnknownPacketException, RemainingDataException
 from rakpy.protocol import packets
 
 
