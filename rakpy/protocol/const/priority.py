@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 
 # The highest possible priority. These message trigger sends immediately, and are generally not buffered or

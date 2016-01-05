@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
+
+import six
 
 
 class EndOfStreamException(Exception):
@@ -56,7 +60,7 @@ class ByteStream(object):
 def convert_to_stream(argument_name):
     def actual_decorator(function):
         try:
-            argument_index = function.func_code.co_varnames.index(argument_name)
+            argument_index = six.get_function_code(function).co_varnames.index(argument_name)
         except ValueError:
             return function
 

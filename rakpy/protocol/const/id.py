@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+
 # These types are never returned to the user.
 
 # Ping from a connected system.  Update timestamps (internal use only)

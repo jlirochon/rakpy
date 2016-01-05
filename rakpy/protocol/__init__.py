@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import inspect
 
 import six
@@ -28,7 +30,8 @@ registry = PacketRegistry()
 
 @convert_to_stream("data")
 def decode_packet(data):
-    packet_id = ord(data[0])
+    packet_id = six.indexbytes(data, 0)
+
     try:
         packet_class = registry[packet_id]
     except KeyError:
@@ -129,7 +132,7 @@ class MagicField(fields.Field):
         value = data.read(len(MAGIC))
         if value != MAGIC:
             raise ValueError()
-        return ""
+        return b""
 
     @classmethod
     def encode(cls, value):

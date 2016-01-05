@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
 
 from rakpy.io import ByteStream, convert_to_stream
 
 
 def test_seek_set():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -23,7 +25,7 @@ def test_seek_set():
 
 
 def test_seek_cur():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -41,7 +43,7 @@ def test_seek_cur():
 
 
 def test_seek_end():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -56,7 +58,7 @@ def test_seek_end():
 
 
 def test_read_all():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -69,7 +71,7 @@ def test_read_all():
 
 
 def test_read():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -95,7 +97,7 @@ def test_read():
 
 
 def test_slice():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -109,7 +111,7 @@ def test_slice():
 
 
 def test_len():
-    data = "\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
+    data = b"\x00\x0c\xe3\x83\x9c\xe3\x83\xbc\xe3\x83\xab\xe3\x83\x88"
     stream = ByteStream(data)
     assert stream.tell() == 0
 
@@ -144,7 +146,7 @@ def test_convert_to_stream():
         def test_invalid(self, bar):
             return bar
 
-    data = "\x01\x02\x03\x04\x05"
+    data = b"\x01\x02\x03\x04\x05"
 
     helper = TestHelper()
 

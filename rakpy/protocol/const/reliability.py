@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 
 # Same as regular UDP, except that it will also discard duplicate datagrams.

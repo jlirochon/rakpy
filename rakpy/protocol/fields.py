@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from struct import pack, unpack
 from collections import namedtuple
+
+import six
 
 from rakpy.io import convert_to_stream, EndOfStreamException
 
@@ -99,7 +103,7 @@ class TriadField(UnsignedNumericField):
     @classmethod
     @convert_to_stream("data")
     def decode(cls, data):
-        return unpack(cls.PACK_FORMAT, "\x00" + data.read(cls.LENGTH))[0]
+        return unpack(cls.PACK_FORMAT, b"\x00" + data.read(cls.LENGTH))[0]
 
     @classmethod
     def encode(cls, value):
@@ -196,7 +200,7 @@ class OptionsField(Field):
             data |= 0b00010000
         reliability = options.get("reliability", 0x00) << 5
         data |= reliability
-        return chr(data)
+        return six.int2byte(data)
 
 
 class AddressField(Field):
@@ -263,4 +267,4 @@ class PaddingField(Field):
 
     def encode(self, value):
         offset = self._options.get('offset', 0)
-        return max(0, value - offset) * "\x00"
+        return max(0, value - offset) * b"\x00"
