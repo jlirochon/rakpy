@@ -11,7 +11,7 @@ Pythonic implementation of the [RakNet](https://github.com/OculusVR/RakNet) prot
 
 ## Compatibility
 
-![Python 3.5](https://img.shields.io/badge/Python-3.5-blue.svg?style=flat-square)
+![Python 3.5, 3.4, 3.3](https://img.shields.io/badge/Python-3.5,%203.4,%203.3-blue.svg?style=flat-square)
 ![Python 2.7](https://img.shields.io/badge/Python-2.7-blue.svg?style=flat-square)
 
 ## Project goals
@@ -28,7 +28,7 @@ Pythonic implementation of the [RakNet](https://github.com/OculusVR/RakNet) prot
 ```python
 In [1]: from rakpy.protocol import decode_packet
 
-In [2]: buffer = "\x01\x00\ (...) \x23\xa3"  # data from UDP packet
+In [2]: buffer = b"\x01\x00\ (...) \x23\xa3"  # data from UDP packet
 
 In [3]: packet = decode_packet(buffer)
 
@@ -50,5 +50,5 @@ In [1]: from rakpy.protocol.packets import UnconnectedPing
 In [2]: packet = UnconnectedPing(ping_id=193351, client_id=1450258689827747)
 
 In [3]: packet.encode()
-"\x01\x00\ (...) \x23\xa3"  # you can send this over UDP
+b"\x01\x00\ (...) \x23\xa3"  # you can send this over UDP
 ```
