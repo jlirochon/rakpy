@@ -87,14 +87,6 @@ class UnsignedByteField(UnsignedNumericField):
     LENGTH = 1
     PACK_FORMAT = "!B"
 
-    @classmethod
-    def get_min_value(cls):
-        return 0
-
-    @classmethod
-    def get_max_value(cls):
-        return pow(2, 8 * cls.LENGTH) - 1
-
 
 class TriadField(UnsignedNumericField):
     LENGTH = 3
@@ -110,7 +102,7 @@ class TriadField(UnsignedNumericField):
         return super(TriadField, cls).encode(value)[1:]
 
 
-class UnsignedShortField(UnsignedByteField):
+class UnsignedShortField(UnsignedNumericField):
     LENGTH = 2
     PACK_FORMAT = "!H"
 
