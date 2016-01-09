@@ -33,12 +33,12 @@ In [2]: buffer = b"\x01\x00\ (...) \x23\xa3"  # data from UDP packet
 In [3]: packet = decode_packet(buffer)
 
 In [4]: print packet
-UnconnectedPing(ping_id=193351, client_id=1450258689827747)
+UnconnectedPing(time=193351, client_guid=1450258689827747)
 
-In [5]: packet.ping_id
+In [5]: packet.time
 193351
 
-In [6]: packet.client_id
+In [6]: packet.client_guid
 1450258689827747
 ```
 
@@ -47,8 +47,8 @@ In [6]: packet.client_id
 ```python
 In [1]: from rakpy.protocol.packets import UnconnectedPing
 
-In [2]: packet = UnconnectedPing(ping_id=193351, client_id=1450258689827747)
+In [2]: packet = UnconnectedPong(ping_time=193351, server_guid=1450258689827742)
 
 In [3]: packet.encode()
-b"\x01\x00\ (...) \x23\xa3"  # you can send this over UDP
+b"\x1c\x00\ (...) \x23\xa3"  # you can send this over UDP
 ```
