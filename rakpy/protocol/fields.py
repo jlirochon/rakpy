@@ -117,6 +117,11 @@ class LongLongField(SignedNumericField):
     PACK_FORMAT = "!q"
 
 
+class UnsignedLongLongField(UnsignedNumericField):
+    LENGTH = 8
+    PACK_FORMAT = "!Q"
+
+
 class FloatField(NumericField):
     LENGTH = 4
     PACK_FORMAT = "!f"

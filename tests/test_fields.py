@@ -206,6 +206,26 @@ def test_long_long_field():
         field.encode(9223372036854775808)
 
 
+def test_unsigned_long_long_field():
+    field = fields.UnsignedLongLongField()
+
+    # too low
+    with pytest.raises(OverflowError):
+        field.encode(-1)
+
+    # 0 (min value)
+    assert field.encode(0) == b"\x00\x00\x00\x00\x00\x00\x00\x00"
+    assert field.decode(b"\x00\x00\x00\x00\x00\x00\x00\x00") == 0
+
+    # max value
+    assert field.encode(18446744073709551615) == b"\xff\xff\xff\xff\xff\xff\xff\xff"
+    assert field.decode(b"\xff\xff\xff\xff\xff\xff\xff\xff") == 18446744073709551615
+
+    # too high
+    with pytest.raises(OverflowError):
+        field.encode(18446744073709551616)
+
+
 def test_string_field():
     field = fields.StringField()
 
