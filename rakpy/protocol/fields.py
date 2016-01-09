@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from struct import pack, unpack
 from collections import namedtuple
 
+import datetime
 import six
 
 from rakpy.io import convert_to_stream, EndOfStreamException
@@ -265,3 +266,25 @@ class PaddingField(Field):
     def encode(self, value):
         offset = self._options.get('offset', 0)
         return max(0, value - offset) * b"\x00"
+
+
+class DateTimeField(Field):
+    """
+    Converts μs to datetime.datetime
+    """
+    @classmethod
+    @convert_to_stream("data")
+    def decode(cls, data):
+        micro_seconds = UnsignedLongLongField.decode(data)
+        return datetime.datetime.fromtimestamp(0) + datetime.timedelta(microseconds=micro_seconds)
+
+    def encode(self, value):
+        delta = value - datetime.datetime.fromtimestamp(0)
+        return UnsignedLongLongField.encode(delta.total_seconds() * 1000000)
+
+
+class TimestampField(UnsignedLongLongField):
+    """
+    timestamp with 1 μs precision
+    """
+    pass

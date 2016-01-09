@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
 import pytest
 
 from rakpy.io import EndOfStreamException
@@ -206,8 +207,9 @@ def test_long_long_field():
         field.encode(9223372036854775808)
 
 
-def test_unsigned_long_long_field():
-    field = fields.UnsignedLongLongField()
+@pytest.mark.parametrize("field_class", [fields.UnsignedLongLongField, fields.TimestampField])
+def test_unsigned_long_long_field(field_class):
+    field = field_class()
 
     # too low
     with pytest.raises(OverflowError):
@@ -389,3 +391,21 @@ def test_padding_field(offset, encoded, decoded):
     field = fields.PaddingField(offset=offset)
     assert field.encode(decoded) == encoded
     assert field.decode(encoded) == decoded
+
+
+def test_date_time_field():
+    field = fields.DateTimeField()
+
+    # Epoch
+    assert field.encode(datetime.datetime.fromtimestamp(0)) == b"\x00\x00\x00\x00\x00\x00\x00\x00"
+    assert field.decode(b"\x00\x00\x00\x00\x00\x00\x00\x00") == datetime.datetime.fromtimestamp(0)
+
+    # 2016-01-01
+    decoded = datetime.datetime(year=2016, month=1, day=1)
+    assert field.encode(decoded) == b"\x00\x05\x28\x39\x9d\x3f\xbc\x00"
+    assert field.decode(b"\x00\x05\x28\x39\x9d\x3f\xbc\x00") == decoded
+
+    # 2016-01-01 + 1 μs
+    decoded = datetime.datetime(year=2016, month=1, day=1, microsecond=1)
+    assert field.encode(decoded) == b"\x00\x05\x28\x39\x9d\x3f\xbc\x01"
+    assert field.decode(b"\x00\x05\x28\x39\x9d\x3f\xbc\x01") == decoded
