@@ -27,8 +27,8 @@
             "id": "\\x1d", 
             "structure": [
                 {
-                    "type": "long_long", 
-                    "name": "ping_id"
+                    "type": "timestamp", 
+                    "name": "ping_time"
                 }, 
                 {
                     "type": "long_long", 
@@ -53,8 +53,8 @@
                     "name": "client_guid"
                 }, 
                 {
-                    "type": "long_long", 
-                    "name": "send_ping"
+                    "type": "timestamp", 
+                    "name": "time"
                 }, 
                 {
                     "type": "bool", 
@@ -118,12 +118,12 @@
                     "name": "system_address_9"
                 }, 
                 {
-                    "type": "long_long", 
-                    "name": "send_ping"
+                    "type": "timestamp", 
+                    "name": "ping_time"
                 }, 
                 {
-                    "type": "long_long", 
-                    "name": "send_pong"
+                    "type": "timestamp", 
+                    "name": "pong_time"
                 }
             ], 
             "name": "new_incoming_connection"
@@ -223,8 +223,8 @@
             "id": "\\x00", 
             "structure": [
                 {
-                    "type": "long_long", 
-                    "name": "ping_id"
+                    "type": "timestamp", 
+                    "name": "time"
                 }
             ], 
             "name": "connected_ping"
@@ -233,8 +233,8 @@
             "id": "\\x03", 
             "structure": [
                 {
-                    "type": "long_long", 
-                    "name": "ping_id"
+                    "type": "timestamp", 
+                    "name": "ping_time"
                 }
             ], 
             "name": "connected_pong"
@@ -243,8 +243,8 @@
             "id": "\\x01", 
             "structure": [
                 {
-                    "type": "long_long", 
-                    "name": "ping_id"
+                    "type": "timestamp", 
+                    "name": "time"
                 }, 
                 {
                     "type": "__magic__"
@@ -260,8 +260,8 @@
             "id": "\\x02", 
             "structure": [
                 {
-                    "type": "long_long", 
-                    "name": "ping_id"
+                    "type": "timestamp", 
+                    "name": "time"
                 }, 
                 {
                     "type": "__magic__"
@@ -277,8 +277,8 @@
             "id": "\\x1c", 
             "structure": [
                 {
-                    "type": "long_long", 
-                    "name": "ping_id"
+                    "type": "timestamp", 
+                    "name": "ping_time"
                 }, 
                 {
                     "type": "long_long", 

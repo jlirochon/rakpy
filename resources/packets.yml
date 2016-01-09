@@ -23,7 +23,8 @@ packets:
     type: packet
     name: advertise_system
     structure:
-      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      # todo: is this MC specific ?
+      - { type: timestamp, name: ping_time }
       - { type: long_long, name: server_guid }
       - { type: __magic__ }
       - { type: string, name: server_name }
@@ -35,7 +36,7 @@ packets:
     type: data_packet
     structure:
       - { type: long_long, name: client_guid }
-      - { type: long_long, name: send_ping }
+      - { type: timestamp, name: time }  # todo: default value should be current (encoding) time
       - { type: bool, name: use_security }
 
   # DISCONNECTION_NOTIFICATION
@@ -63,8 +64,8 @@ packets:
       - { type: address, name: system_address_7 }
       - { type: address, name: system_address_8 }
       - { type: address, name: system_address_9 }
-      - { type: long_long, name: send_ping }
-      - { type: long_long, name: send_pong }
+      - { type: timestamp, name: ping_time }
+      - { type: timestamp, name: pong_time }
 
   # DATA_PACKET_0
   # DATA_PACKET_1
@@ -135,7 +136,7 @@ packets:
   - id: \x00
     name: connected_ping
     structure:
-      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      - { type: timestamp, name: time }  # todo: default value should be current (encoding) time
 
   # CONNECTED_PONG
   # Pong from a connected system.
@@ -143,7 +144,7 @@ packets:
   - id: \x03
     name: connected_pong
     structure:
-      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      - { type: timestamp, name: ping_time }
 
 #  # CONNECTION_REQUEST_ACCEPTED
 #  # In a client/server environment, our connection request to the server has been accepted.
@@ -159,7 +160,7 @@ packets:
   - id: \x01
     name: unconnected_ping
     structure:
-      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      - { type: timestamp, name: time }  # todo: default value should be current (encoding) time
       - { type: __magic__ }
       - { type: long_long, name: client_guid }
 
@@ -170,7 +171,7 @@ packets:
   - id: \x02
     name: unconnected_ping_open_connections
     structure:
-      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      - { type: timestamp, name: time }  # todo: default value should be current (encoding) time
       - { type: __magic__ }
       - { type: long_long, name: client_guid }
 
@@ -180,7 +181,7 @@ packets:
   - id: \x1c
     name: unconnected_pong
     structure:
-      - { type: long_long, name: ping_id }  # todo: type should be RakNet::TimeMS ?
+      - { type: timestamp, name: ping_time }
       # enumeration data below. todo: is this MC specific ?
       - { type: long_long, name: server_guid }
       - { type: __magic__ }
